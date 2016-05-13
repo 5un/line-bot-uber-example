@@ -3,6 +3,8 @@ var bodyParser = require('body-parser');
 var express = require('express');
 var request = require('superagent');
 var LineBot = require('line-bot-sdk');
+var Uber = require('node-uber');
+
 var client = LineBot.client({
   channelID: 'YOUR_CHANNEL_ID',
   channelSecret: 'YOUR_CHANNEL_SECRET',
