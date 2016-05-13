@@ -21,7 +21,7 @@ var uber = new Uber({
   language: 'en_US' // optional, defaults to en_US
 });
 
-var users = {};  
+var lineUsers = {};  
 
 var app = express();
 
@@ -29,6 +29,14 @@ app.set('port', (process.env.PORT || 5000));
 
 app.use(bodyParser.urlencoded({ extended: false, limit: 2 * 1024 * 1024 }));
 app.use(bodyParser.json({ limit: 2 * 1024 * 1024 }));
+
+var authorizeUber = function(lineBot, fromMid){
+
+  lineBot.sendText(fromMid, 'Please authorize Uber via this link ' + 
+                                          uber.getAuthorizeUrl(['history','profile', 'request', 'places'],
+                                          uberRedirectURL + '?line_mid=' + fromMid));
+
+};
 
 app.post('/', function (req, res) {
   console.log(req.body.result);
@@ -40,7 +48,39 @@ app.post('/', function (req, res) {
 
       if(receive.isText()){
 
-        if(receive.getText()==='me'){
+        var segments = receive.getText().split(/\s+/);
+
+        if(segments.length > 0 && segments[0] === '@uber'){
+
+          var needAuthorization = false;
+          var lineUser = lineUsers[receive.getFromMid()];
+          if(lineUsers === undefined){
+
+            authorizeUber(client, receive.getFromMid);
+
+          }else if(segments[1] === 'estimate'){
+
+            //TODO request ride
+
+          }else if(segments[1] === 'ride'){
+
+            //TODO request ride
+
+          }else {
+
+            // Just show out info
+            uber.user.getProfile([lineUser.uberAccessToken], function (err, res) {
+              if (err) {console.log(err);
+                // if it's auth error, try reauthorize with refresh token
+              }else {
+                console.log(res);
+                // send info back to user
+              }
+            });
+
+          }
+
+        }else if(receive.getText()==='me'){
           client.getUserProfile(receive.getFromMid())
             .then(function onResult(res){
               if(res.status === 200){
@@ -52,31 +92,9 @@ app.post('/', function (req, res) {
             }, function onError(err){
               console.error(err);
             });
-        } else if(receive.getText() === '@uber') {
-
-          // check params
-
-          var url = uber.getAuthorizeUrl(['history','profile', 'request', 'places'],
-                                          uberRedirectURL + '?line_mid=' + receive.getFromMid());
-          console.log('uber authoize url = ' + url);
-
-          client.sendText(receive.getFromMid(), 'Please authorize Uber via this link ' + url);
-
         } else {
           client.sendText(receive.getFromMid(), receive.getText());
         }
-
-      }else if(receive.isImage()){
-        
-        client.sendText(receive.getFromMid(), 'Thanks for the image!');
-
-      }else if(receive.isVideo()){
-
-        client.sendText(receive.getFromMid(), 'Thanks for the video!');
-
-      }else if(receive.isAudio()){
-
-        client.sendText(receive.getFromMid(), 'Thanks for the audio!');
 
       }else if(receive.isLocation()){
 
@@ -85,16 +103,6 @@ app.post('/', function (req, res) {
             receive.getText() + receive.getAddress(),
             receive.getLatitude(),
             receive.getLongitude()
-          );
-
-      }else if(receive.isSticker()){
-
-        // This only works if the BOT account have the same sticker too
-        client.sendSticker(
-            receive.getFromMid(),
-            receive.getStkId(),
-            receive.getStkPkgId(),
-            receive.getStkVer()
           );
 
       }else if(receive.isContact()){
@@ -120,17 +128,26 @@ app.post('/', function (req, res) {
 });
 
 app.get('/uber_callback', function (req, res) {
-  console.log('uber callback ' + request.query.code);
+  console.log('uber callback ' + req.query.code);
 
   uber.authorization({
-    authorization_code: request.query.code
+    authorization_code: req.query.code
   }, function(err, access_token, refresh_token) {
     if (err) {
       console.error(err);
     } else {
       // store the user id and associated access token
       // redirect the user back to your actual app
-      response.redirect('/web/index.html');
+      //res.redirect('/web/index.html');
+
+      // Try to open line again
+      if(req.query.line_mid){
+        lineUsers[req.query.line_mid] = {
+          mid: req.query.line_mid,
+          uberAccessToken: access_token,
+          uberRefreshToken: refresh_token
+        }
+      }
     }
   });
 
