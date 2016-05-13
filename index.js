@@ -56,7 +56,8 @@ app.post('/', function (req, res) {
           var lineUser = lineUsers[receive.getFromMid()];
           if(lineUser === undefined){
 
-            authorizeUber(client, receive.getFromMid);
+            console.log('no auth info');
+            authorizeUber(client, receive.getFromMid());
 
           }else if(segments[1] === 'estimate'){
 
@@ -69,10 +70,13 @@ app.post('/', function (req, res) {
           }else {
 
             // Just show out info
+            console.log('querying user info');
             uber.user.getProfile([lineUser.uberAccessToken], function (err, res) {
-              if (err) {console.log(err);
+              if (err) {
+                console.log(err);
                 // if it's auth error, try reauthorize with refresh token
               }else {
+
                 console.log(res);
                 // send info back to user
               }
