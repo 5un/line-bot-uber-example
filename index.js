@@ -15,10 +15,12 @@ var uber = new Uber({
   client_id: 'H1IropVyJS3ExakiZ4ncYsG7jhgIhJef',
   client_secret: '8cdSFHQ-n9Aye8dyvbM1kQsWrMipcEMeLbI4gTwC',
   server_token: '-kuG1RcjtHta1ry_47orwyRK2EIxTgkf_cQ4bAtc',
-  redirect_uri: 'REDIRECT URL', // Can open line again ?
+  redirect_uri: 'https://sheltered-refuge-66681.herokuapp.com/uber_callback', // Can open line again ?
   name: 'Inline',
   language: 'en_US' // optional, defaults to en_US
 });
+
+var users = {};  
 
 var app = express();
 
@@ -50,6 +52,8 @@ app.post('/', function (req, res) {
               console.error(err);
             });
         } else if(receive.getText() === 'uber') {
+
+          // check params
 
           var url = uber.getAuthorizeUrl(['history','profile', 'request', 'places']);
           console.log('uber authoize url = ' + url);
@@ -109,6 +113,24 @@ app.post('/', function (req, res) {
 
   });
   
+  res.send('ok');
+});
+
+app.post('/uber_callback', function (req, res) {
+  console.log('uber callback ' + request.query.code);
+
+  uber.authorization({
+    authorization_code: request.query.code
+  }, function(err, access_token, refresh_token) {
+    if (err) {
+      console.error(err);
+    } else {
+      // store the user id and associated access token
+      // redirect the user back to your actual app
+      response.redirect('/web/index.html');
+    }
+  });
+
   res.send('ok');
 });
 
