@@ -57,7 +57,7 @@ app.post('/', function (req, res) {
           // check params
 
           var url = uber.getAuthorizeUrl(['history','profile', 'request', 'places'],
-                                          uberRedirectURL /*+ '?line_mid=' + receive.getFromMid() */);
+                                          uberRedirectURL '?line_mid=' + receive.getFromMid());
           console.log('uber authoize url = ' + url);
 
           client.sendText(receive.getFromMid(), 'Please authorize Uber via this link ' + url);
@@ -119,7 +119,7 @@ app.post('/', function (req, res) {
   res.send('ok');
 });
 
-app.post('/uber_callback', function (req, res) {
+app.get('/uber_callback', function (req, res) {
   console.log('uber callback ' + request.query.code);
 
   uber.authorization({
