@@ -67,13 +67,13 @@ app.post('/', function (req, res) {
               }
               else {
                 console.log(res);
-                var priceInfo = 'prices: \n';
+                var priceInfo = 'Your ride price estimates: \n';
                 for(var i in res.prices){
                   var price = res.prices[i]
                   priceInfo = priceInfo + price.localized_display_name + ': ' + price.estimate + '\n';
                 }
 
-                client.sendText(lineUser.mid, 'Your ride from A to B ' + priceInfo);
+                client.sendText(lineUser.mid, priceInfo);
                 //client.sendText(lineUser.mid, 'Hi!, your uber info is ' + 
                 //  res.first_name + ' ' + res.last_name + ' email: ' + res.email);
               }
