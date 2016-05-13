@@ -72,8 +72,8 @@ app.post('/', function (req, res) {
                   var price = res.prices[i]
                   priceInfo = priceInfo + price.localized_display_name + ': ' +
                                 price.currency_code + ' '
-                                price.low_estimation + ' - '
-                                price.high_estimation + '\n'
+                                price.low_estimate + ' - '
+                                price.high_estimate + '\n'
                 }
 
                 client.sendText(lineUser.mid, 'Your ride from A to B ' + priceInfo);
