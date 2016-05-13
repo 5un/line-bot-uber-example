@@ -52,12 +52,12 @@ app.post('/', function (req, res) {
             }, function onError(err){
               console.error(err);
             });
-        } else if(receive.getText() === 'uber') {
+        } else if(receive.getText() === '@uber') {
 
           // check params
 
           var url = uber.getAuthorizeUrl(['history','profile', 'request', 'places'],
-                                          uberRedirectURL '?line_mid=' + receive.getFromMid());
+                                          uberRedirectURL + '?line_mid=' + receive.getFromMid());
           console.log('uber authoize url = ' + url);
 
           client.sendText(receive.getFromMid(), 'Please authorize Uber via this link ' + url);
