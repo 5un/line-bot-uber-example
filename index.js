@@ -57,9 +57,9 @@ app.post('/', function (req, res) {
           // check params
 
           var url = uber.getAuthorizeUrl(['history','profile', 'request', 'places'],
-                                          uberRedirectURL + '?line_mid=' + receive.getFromMid());
+                                          uberRedirectURL /*+ '?line_mid=' + receive.getFromMid() */);
           console.log('uber authoize url = ' + url);
-          
+
           client.sendText(receive.getFromMid(), 'Please authorize Uber via this link ' + url);
 
         } else {
