@@ -54,7 +54,7 @@ app.post('/', function (req, res) {
 
           var needAuthorization = false;
           var lineUser = lineUsers[receive.getFromMid()];
-          if(lineUsers === undefined){
+          if(lineUser === undefined){
 
             authorizeUber(client, receive.getFromMid);
 
