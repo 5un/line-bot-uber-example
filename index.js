@@ -61,9 +61,20 @@ app.post('/', function (req, res) {
 
           }else if(segments[1] === 'estimate'){
 
+            uber.estimates.getPriceForRoute(3.1357, 101.6880, 3.0833, 101.6500, function (err, res) {
+              if (err) { 
+                console.error(err);
+              }
+              else {
+                console.log(res);
+                //client.sendText(lineUser.mid, 'Hi!, your uber info is ' + 
+                //  res.first_name + ' ' + res.last_name + ' email: ' + res.email);
+              }
+            });
             //TODO request ride
 
           }else if(segments[1] === 'ride'){
+
 
             //TODO request ride
 
@@ -79,6 +90,8 @@ app.post('/', function (req, res) {
 
                 console.log(res);
                 // send info back to user
+                client.sendText(lineUser.mid, 'Hi!, your uber info is ' + 
+                  res.first_name + ' ' + res.last_name + ' email: ' + res.email);
               }
             });
 
