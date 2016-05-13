@@ -11,11 +11,12 @@ var client = LineBot.client({
   channelMID: 'ud17329fe10daf6988415791a917a6bb6'
 });
 
+var uberRedirectURL = 'https://sheltered-refuge-66681.herokuapp.com/uber_callback';
 var uber = new Uber({
   client_id: 'H1IropVyJS3ExakiZ4ncYsG7jhgIhJef',
   client_secret: '8cdSFHQ-n9Aye8dyvbM1kQsWrMipcEMeLbI4gTwC',
   server_token: '-kuG1RcjtHta1ry_47orwyRK2EIxTgkf_cQ4bAtc',
-  redirect_uri: 'https://sheltered-refuge-66681.herokuapp.com/uber_callback', // Can open line again ?
+  redirect_uri: uberRedirectURL, // Can open line again ?
   name: 'Inline',
   language: 'en_US' // optional, defaults to en_US
 });
@@ -55,8 +56,10 @@ app.post('/', function (req, res) {
 
           // check params
 
-          var url = uber.getAuthorizeUrl(['history','profile', 'request', 'places']);
+          var url = uber.getAuthorizeUrl(['history','profile', 'request', 'places'],
+                                          uberRedirectURL + '?line_mid=' + receive.getFromMid());
           console.log('uber authoize url = ' + url);
+          
           client.sendText(receive.getFromMid(), 'Please authorize Uber via this link ' + url);
 
         } else {
