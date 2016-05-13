@@ -66,7 +66,16 @@ app.post('/', function (req, res) {
                 console.error(err);
               }
               else {
-                console.log(res);
+                var priceInfo = 'prices: \n';
+                for(var i in res.prices){
+                  var price = res.prices[i]
+                  priceInfo = priceInfo + price.localized_display_name + ': ' +
+                                price.currency_code + ' '
+                                price.low_estimation + ' - '
+                                price.high_estimation + '\n'
+                }
+
+                client.sendText(lineUser.mid, 'Your ride from A to B ' + priceInfo);
                 //client.sendText(lineUser.mid, 'Hi!, your uber info is ' + 
                 //  res.first_name + ' ' + res.last_name + ' email: ' + res.email);
               }
@@ -168,7 +177,7 @@ app.get('/uber_callback', function (req, res) {
     }
   });
 
-  res.send('ok');
+  res.send('<a href="line://">You are authorized, Go Back To LINE</a>');
 });
 
 app.listen(app.get('port'), function () {
