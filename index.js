@@ -50,8 +50,9 @@ app.post('/', function (req, res) {
               console.error(err);
             });
         } else if(receive.getText() === 'uber') {
-          
+
           var url = uber.getAuthorizeUrl(['history','profile', 'request', 'places']);
+          console.log('uber authoize url = ' + url);
           client.sendText('Please authorize Uber via this link ' + url);
 
         } else {
