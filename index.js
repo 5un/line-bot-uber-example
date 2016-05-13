@@ -66,6 +66,7 @@ app.post('/', function (req, res) {
                 console.error(err);
               }
               else {
+                console.log(res);
                 var priceInfo = 'prices: \n';
                 for(var i in res.prices){
                   var price = res.prices[i]
