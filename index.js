@@ -8,7 +8,7 @@ var Uber = require('node-uber');
 var client = LineBot.client({
   channelID: '1466956410',
   channelSecret: '2a43289185e1769dcc9f6684e44b380c',
-  channelMID: 'ud17329fe10daf6988415791a917a6bb6';
+  channelMID: 'ud17329fe10daf6988415791a917a6bb6'
 });
 
 var uber = new Uber({
