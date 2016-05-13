@@ -70,10 +70,7 @@ app.post('/', function (req, res) {
                 var priceInfo = 'prices: \n';
                 for(var i in res.prices){
                   var price = res.prices[i]
-                  priceInfo = priceInfo + price.localized_display_name + ': ' +
-                                price.currency_code + ' '
-                                price.low_estimate + ' - '
-                                price.high_estimate + '\n'
+                  priceInfo = priceInfo + price.localized_display_name + ': ' + price.estimate + '\n';
                 }
 
                 client.sendText(lineUser.mid, 'Your ride from A to B ' + priceInfo);
