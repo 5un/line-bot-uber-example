@@ -53,7 +53,7 @@ app.post('/', function (req, res) {
 
           var url = uber.getAuthorizeUrl(['history','profile', 'request', 'places']);
           console.log('uber authoize url = ' + url);
-          client.sendText('Please authorize Uber via this link ' + url);
+          client.sendText(receive.getFromMid(), 'Please authorize Uber via this link ' + url);
 
         } else {
           client.sendText(receive.getFromMid(), receive.getText());
