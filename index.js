@@ -50,12 +50,9 @@ app.post('/', function (req, res) {
               console.error(err);
             });
         } else if(receive.getText() === 'uber') {
-
-          app.get('/api/login', function(request, response) {
-            console.log(response);
-            var url = uber.getAuthorizeUrl(['history','profile', 'request', 'places']);
-            client.sendText('Please authorize Uber via this link ' + url);
-          });
+          
+          var url = uber.getAuthorizeUrl(['history','profile', 'request', 'places']);
+          client.sendText('Please authorize Uber via this link ' + url);
 
         } else {
           client.sendText(receive.getFromMid(), receive.getText());
