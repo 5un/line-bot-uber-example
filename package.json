@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "body-parser": "^1.15.1",
-    "ejs": "2.4.1",
+    "ejs": "2.7.1",
     "express": "4.13.3",
     "line-bot-sdk": "*",
     "lodash": "^4.12.0",
